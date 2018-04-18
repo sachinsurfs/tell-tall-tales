@@ -1,7 +1,11 @@
-<<<<<<< HEAD
 # tell-tall-tales
 Implementation of the Tall Tale game using Machine Learning
-=======
-Implementation of the Tall Tale game using Machine Learning
 
->>>>>>> 25c0abc286954e2d9fde3d448cc6e50baec81412
+Our experiments are being run on
+
+Skip-thoughts - https://github.com/ryankiros/skip-thoughts
+
+Hierarchical Encoder Decoder RNN - https://github.com/julianser/hed-dlg-truncated
+
+Bi-LSTM 
+
