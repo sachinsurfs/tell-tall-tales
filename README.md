@@ -11,4 +11,4 @@ Bi-LSTM - https://github.com/pytorch/examples/tree/master/word_language_model
 
 Seq2Seq Attention - https://github.com/IBM/pytorch-seq2seq
 
-This repository is continuously being updated, but you can read more about our project [here](https://drive.google.com/file/d/1A3DAJHAc0j6rrVvduf3edK-BEJUxaySM/view?usp=sharing).
+This repository is continuously being updated, but you can read more about our project [here](https://drive.google.com/file/d/1TZZG_M_KhhBp37XCMHop_PvrTlF1ngU5/view?usp=sharing).
