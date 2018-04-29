@@ -6,7 +6,9 @@ import random
 
 from nltk import sent_tokenize
  
-
+'''
+Usage : python split_sent.py --file <file-name> > <out-file-name>
+'''
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--file', help="data file", default="train.txt")
