@@ -86,7 +86,7 @@ hiddenA = modelA.init_hidden(1)
 hiddenB = modelB.init_hidden(1)
 hiddenC = modelC.init_hidden(1)
 
-input = Variable(torch.rand(1, 1).mul(ntokens).long(), volatile=True)
+input = Variable(torch.rand(1, 1).mul(ntokensA).long(), volatile=True)
 if args.cuda:
     input.data = input.data.cuda()
 
@@ -100,10 +100,10 @@ with open(args.outf, 'w') as outf:
         if curr == 'A':
             model = modelB
             curr = 'B'
-        else if curr == 'B':
+        elif curr == 'B':
             model = modelC
             curr = 'C'
-        else if curr == 'C':
+        elif curr == 'C':
             model = modelA
             curr = 'A'
         outf.write(curr+": ", end="")
