@@ -104,16 +104,19 @@ with open(args.outf, 'w') as outf:
             model = modelB
             corpus = corpusB
             ntokens = ntokensB
+            hidden = hiddenB
             curr = 'B'
         elif curr == 'B':
             model = modelC
             corpus = corpusC
             ntokens = ntokensC
+            hidden = hiddenC
             curr = 'C'
         elif curr == 'C':
             model = modelA
             corpus = corpusA
             ntokens = ntokensA
+            hidden = hiddenA
             curr = 'A'
         if skipOne:
             skipOne = False
@@ -125,7 +128,7 @@ with open(args.outf, 'w') as outf:
                 input = Variable(torch.rand(1, 1).mul(ntokens).long(), volatile=True)
                 input.data.fill_(0) #unknown
 
-        outf.write(curr+": ", end="")
+        outf.write(curr+": ")
         for i in range(lenOfSentence):
             output, hidden = model(input, hidden)
             word_weights = output.squeeze().data.div(args.temperature).exp().cpu()
