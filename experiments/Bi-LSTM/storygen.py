@@ -92,8 +92,8 @@ if args.cuda:
 
 lenOfSentence = 10
 noOfTurns = 100
-model = modelA
-curr = 'A'
+model = modelC
+curr = 'C'
 
 with open(args.outf, 'w') as outf:
     for j in range(noOfTurns):
