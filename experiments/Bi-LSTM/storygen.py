@@ -94,18 +94,37 @@ lenOfSentence = 10
 noOfTurns = 100
 model = modelC
 curr = 'C'
+corpus = corpusC
+
+skipOne =True
 
 with open(args.outf, 'w') as outf:
     for j in range(noOfTurns):
         if curr == 'A':
             model = modelB
+            corpus = corpusB
+            ntokens = ntokensB
             curr = 'B'
         elif curr == 'B':
             model = modelC
+            corpus = corpusC
+            ntokens = ntokensC
             curr = 'C'
         elif curr == 'C':
             model = modelA
+            corpus = corpusA
+            ntokens = ntokensA
             curr = 'A'
+        if skipOne:
+            skipOne = False
+        else:
+            if word in corpus.dictionary.word2idx:
+                input = Variable(torch.rand(1, 1).mul(ntokens).long(), volatile=True)
+                input.data.fill_(corpus.dictionary.word2idx[word])
+            else:
+                input = Variable(torch.rand(1, 1).mul(ntokens).long(), volatile=True)
+                input.data.fill_(0) #unknown
+
         outf.write(curr+": ", end="")
         for i in range(lenOfSentence):
             output, hidden = model(input, hidden)
@@ -118,6 +137,7 @@ with open(args.outf, 'w') as outf:
 
             if i % args.log_interval == 0:
                 print('| Generated {}/{} words'.format(i, args.words))
+        
         outf.write('\n')
 
         

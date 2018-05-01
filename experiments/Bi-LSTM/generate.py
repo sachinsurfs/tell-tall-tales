@@ -12,18 +12,13 @@ from torch.autograd import Variable
 
 import data
 
-parser = argparse.ArgumentParser(description='PyTorch Language Model')
+parser = argparse.ArgumentParser(description='PyTorch Wikitext-2 Language Model')
 
 # Model parameters.
-parser.add_argument('--data', type=str, default='./data/',
+parser.add_argument('--data', type=str, default='./data/wikitext-2',
                     help='location of the data corpus')
-parser.add_argument('--Acheckpoint', type=str, default='./adventure.pt',
+parser.add_argument('--checkpoint', type=str, default='./model.pt',
                     help='model checkpoint to use')
-parser.add_argument('--Bcheckpoint', type=str, default='./horror.pt',
-                    help='model checkpoint to use')
-parser.add_argument('--Ccheckpoint', type=str, default='./humor.pt',
-                    help='model checkpoint to use')
-
 parser.add_argument('--outf', type=str, default='generated.txt',
                     help='output file for generated text')
 parser.add_argument('--words', type=int, default='1000',
@@ -49,95 +44,31 @@ if torch.cuda.is_available():
 if args.temperature < 1e-3:
     parser.error("--temperature has to be greater or equal 1e-3")
 
-with open(args.Acheckpoint, 'rb') as A:
-    modelA = torch.load(A)
-
-with open(args.Bcheckpoint, 'rb') as B:
-    modelB = torch.load(B)
-
-with open(args.Ccheckpoint, 'rb') as C:
-    modelC = torch.load(C)
-
-modelA.eval()
-modelB.eval()
-modelC.eval()
-
+with open(args.checkpoint, 'rb') as f:
+    model = torch.load(f)
+model.eval()
 
 if args.cuda:
-    modelA.cuda()
-    modelB.cuda()
-    modelC.cuda()
-
+    model.cuda()
 else:
-    modelA.cpu()
-    modelB.cpu()
-    modelC.cpu()
+    model.cpu()
 
-corpusA = data.Corpus(args.data+'adventure')
-corpusB = data.Corpus(args.data+'horror')
-corpusC = data.Corpus(args.data+'humor')
-
-ntokensA = len(corpusA.dictionary)
-ntokensB = len(corpusB.dictionary)
-ntokensC = len(corpusC.dictionary)
-
-
-hiddenA = modelA.init_hidden(1)
-hiddenB = modelB.init_hidden(1)
-hiddenC = modelC.init_hidden(1)
-
-input = Variable(torch.rand(1, 1).mul(ntokensA).long(), volatile=True)
+corpus = data.Corpus(args.data)
+ntokens = len(corpus.dictionary)
+hidden = model.init_hidden(1)
+input = Variable(torch.rand(1, 1).mul(ntokens).long(), volatile=True)
 if args.cuda:
     input.data = input.data.cuda()
 
-lenOfSentence = 10
-noOfTurns = 100
-model = modelC
-curr = 'C'
-corpus = corpusC
-
-skipOne =True
-
 with open(args.outf, 'w') as outf:
-    for j in range(noOfTurns):
-        if curr == 'A':
-            model = modelB
-            corpus = corpusB
-            ntokens = ntokensB
-            curr = 'B'
-        elif curr == 'B':
-            model = modelC
-            corpus = corpusC
-            ntokens = ntokensC
-            curr = 'C'
-        elif curr == 'C':
-            model = modelA
-            corpus = corpusA
-            ntokens = ntokensA
-            curr = 'A'
-        if skipOne:
-            skipOne = False
-        else:
-            if word in corpus.dictionary.word2idx:
-                input = Variable(torch.rand(1, 1).mul(ntokens).long(), volatile=True)
-                input.data.fill_(corpus.dictionary.word2idx[word])
-            else:
-                input = Variable(torch.rand(1, 1).mul(ntokens).long(), volatile=True)
-                input.data.fill_(0) #unknown
+    for i in range(args.words):
+        output, hidden = model(input, hidden)
+        word_weights = output.squeeze().data.div(args.temperature).exp().cpu()
+        word_idx = torch.multinomial(word_weights, 1)[0]
+        input.data.fill_(word_idx)
+        word = corpus.dictionary.idx2word[word_idx]
 
-        outf.write(curr+": ", end="")
-        for i in range(lenOfSentence):
-            output, hidden = model(input, hidden)
-            word_weights = output.squeeze().data.div(args.temperature).exp().cpu()
-            word_idx = torch.multinomial(word_weights, 1)[0]
-            input.data.fill_(word_idx)
-            word = corpus.dictionary.idx2word[word_idx]
+        outf.write(word + ('\n' if i % 20 == 19 else ' '))
 
-            outf.write(word + ' ')
-
-            if i % args.log_interval == 0:
-                print('| Generated {}/{} words'.format(i, args.words))
-        
-        outf.write('\n')
-
-        
+        if i % args.log_interval == 0:
+            print('| Generated {}/{} words'.format(i, args.words))
