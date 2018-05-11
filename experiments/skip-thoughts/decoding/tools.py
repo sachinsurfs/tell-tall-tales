@@ -16,10 +16,9 @@ from search import gen_sample
 #-----------------------------------------------------------------------------#
 # Specify model and dictionary locations here
 #-----------------------------------------------------------------------------#
-path_to_model = '/u/rkiros/research/semhash/models/toydec.npz'
-path_to_dictionary = '/ais/gobi3/u/rkiros/flickr8k/dictionary.pkl'
+path_to_model = '/scratch/jm7432/my_project_foo/run-skipthoughts/firstmodel.npz'
+path_to_dictionary = '/scratch/jm7432/my_project_foo/run-skipthoughts/decoding/book_dict.pkl'
 #-----------------------------------------------------------------------------#
-
 def load_model():
     """
     Load a trained model for decoding

@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+# tell-tall-tales
+Implementation of the Tall Tale game using Machine Learning
+=======
 # skip-thoughts
 
 Sent2Vec encoder and training code from the paper [Skip-Thought Vectors](http://arxiv.org/abs/1506.06726).
@@ -146,3 +150,4 @@ Yukun Zhu, Ryan Kiros, Richard Zemel, Ruslan Salakhutdinov, Raquel Urtasun, Anto
 ## License
 
 [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+>>>>>>> 4ebae72430d0da8b3116ab06ce8735de44fcf3d7

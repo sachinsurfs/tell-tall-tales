@@ -28,7 +28,7 @@ from search import gen_sample
 # main trainer
 def trainer(X, C, stmodel,
             dimctx=4800, #vector dimensionality
-            dim_word=620, # word vector dimensionality
+            dim_word=200, # word vector dimensionality
             dim=1600, # the number of GRU units
             encoder='gru',
             decoder='gru',
@@ -41,8 +41,8 @@ def trainer(X, C, stmodel,
             maxlen_w=100,
             optimizer='adam',
             batch_size = 16,
-            saveto='/u/rkiros/research/semhash/models/toy.npz',
-            dictionary='/ais/gobi3/u/rkiros/bookgen/book_dictionary_large.pkl',
+            saveto='firstmodel.npz',
+            dictionary='/scratch/jm7432/my_project_foo/run-skipthoughts/decoding/book_dict.pkl',
             embeddings=None,
             saveFreq=1000,
             sampleFreq=100,

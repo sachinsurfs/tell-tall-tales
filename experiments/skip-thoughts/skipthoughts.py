@@ -20,8 +20,8 @@ profile = False
 #-----------------------------------------------------------------------------#
 # Specify model and table locations here
 #-----------------------------------------------------------------------------#
-path_to_models = '/u/rkiros/public_html/models/'
-path_to_tables = '/u/rkiros/public_html/models/'
+path_to_models = '/home/jm7432/'
+path_to_tables = '/home/jm7432/'
 #-----------------------------------------------------------------------------#
 
 path_to_umodel = path_to_models + 'uni_skip.npz'
@@ -72,18 +72,24 @@ def load_model():
 
 
 def load_tables():
-    """
-    Load the tables
-    """
+    
+    print 'Load the tables'
+    
     words = []
+    print 'load utable'
     utable = numpy.load(path_to_tables + 'utable.npy')
+    print 'load btable'
     btable = numpy.load(path_to_tables + 'btable.npy')
+    print 'open command'
     f = open(path_to_tables + 'dictionary.txt', 'rb')
     for line in f:
         words.append(line.decode('utf-8').strip())
     f.close()
+    print 'done with loop'
     utable = OrderedDict(zip(words, utable))
+    print 'btable orderedDict()'
     btable = OrderedDict(zip(words, btable))
+    print'end of func'
     return utable, btable
 
 
