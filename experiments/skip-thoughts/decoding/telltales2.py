@@ -22,13 +22,13 @@ text1 =[]
 text2 =[]
 text3 =[]
 text4 =[]
-
+rand_samp = False
 count =0
 d = dict()
 
 d[X[0]] = 1
 #vectors = encoder.encode(X)
-text1 = romancetools.run_sampler(dec4, vectors, beam_width=1, stochastic=False, use_unk=False)
+text1 = romancetools.run_sampler(dec4, vectors, beam_width=1, stochastic=rand_samp, use_unk=False)
 print("Romance: " + text1[0])
 d[text1[0]] = 1
 
@@ -39,32 +39,39 @@ def checkLoop(key):
 
 while(count < 20):
 	vectors = encoder.encode(text1)
-	text2 = adventuretools.run_sampler(dec2, vectors, beam_width=1, stochastic=False, use_unk=False)
-	print("Adventure: " + text2[0])
+	text2 = adventuretools.run_sampler(dec2, vectors, beam_width=1, stochastic=rand_samp, use_unk=False)
+	rand_samp = False
 	if checkLoop(text2[0]):
 		print("Loop")
-		break
+		rand_samp = True
+	print("Adventure: " + text2[0])
 	d[text2[0]] = 1
+
 	vectors = encoder.encode(text2)
-	text3 = humortools.run_sampler(dec1, vectors, beam_width=1, stochastic=False, use_unk=False)
+	text3 = humortools.run_sampler(dec1, vectors, beam_width=1, stochastic=rand_samp, use_unk=False)
+	rand_samp = False
+        if checkLoop(text3[0]):
+                print("Loop")
+		rand_samp = True
 	print("Humor: " + text3[0])
-        if checkLoop(text2[0]):
-                print("Loop")
-                break
 	d[text3[0]] = 1
+
 	vectors = encoder.encode(text3)
-        text4 = romancetools.run_sampler(dec4, vectors, beam_width=1, stochastic=False, use_unk=False)
-        print("Romance: " + text4[0])
-        if checkLoop(text2[0]):
+        text4 = romancetools.run_sampler(dec4, vectors, beam_width=1, stochastic=rand_samp, use_unk=False)
+        rand_samp = False
+        if checkLoop(text4[0]):
                 print("Loop")
-                break
+                rand_samp = True
+	
+	print("Romance: " + text4[0])
 	d[text4[0]] = 1
 	vectors = encoder.encode(text4)
-        text1 = horrortools.run_sampler(dec3, vectors, beam_width=1, stochastic=False, use_unk=False)
-        print("Horror: " + text1[0])
-        if checkLoop(text2[0]):
+        text1 = horrortools.run_sampler(dec3, vectors, beam_width=1, stochastic=rand_samp, use_unk=False)
+        rand_samp = False
+        if checkLoop(text1[0]):
                 print("Loop")
-                break
+                rand_samp = True
+	print("Horror: " + text1[0])
 	d[text1[0]] = 1
 	#text1[0] = moreX[(count)%3]
         #print("Seed: "+ text1[0])
